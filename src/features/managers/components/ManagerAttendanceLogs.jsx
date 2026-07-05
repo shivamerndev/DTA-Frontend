@@ -131,7 +131,7 @@ function ManagerAttendanceLogs() {
               {/* Image Column */}
               <div className="rounded-xl overflow-hidden aspect-square border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900">
                 <img
-                  src={`${import.meta.env.VITE_BASE_URI}${selectedLog.selfieUrl}`}
+                  src={`https://dta-backend-4i1g.onrender.com${selectedLog.selfieUrl}`}
                   className="w-full h-full object-cover"
                   alt="Captured Selfie"
                   onError={(e) => {
