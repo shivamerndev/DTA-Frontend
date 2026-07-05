@@ -1,90 +1,81 @@
-# D-Table Analytics - Frontend Client
+# D-Table Analytics - Frontend
 
-This is the frontend user interface for **D-Table Analytics**, a modern Geofenced Attendance & Overtime management application. It is built using **React**, **Redux Toolkit**, **Vite**, and styled with **Tailwind CSS**.
-
----
-
-## 🚀 Setup
-
-Follow these simple steps to run the frontend client locally on your computer:
-
-### 1. Prerequisites
-Make sure you have [Node.js](https://nodejs.org/) installed (v18 or higher is recommended).
-
-### 2. Install Dependencies
-Open your terminal, navigate to the `frontend` directory, and run:
-```bash
-npm install
-```
-
-### 3. Start the Development Server
-Run the following command to start the app locally:
-```bash
-npm run dev
-```
-Once started, open [http://localhost:5173](http://localhost:5173) in your web browser to view the application.
+A React-based Attendance Management & Analytics System built using Vite, Tailwind CSS, and Redux Toolkit.
 
 ---
 
-## 🏗️ Architecture
+## Setup Instructions
 
-The project is structured logically by **feature modules**, keeping all components, state logic, and API calls modular and easy to find.
+### Prerequisites
+- **Node.js** (v18 or higher recommended)
+- **NPM** (v9 or higher)
 
-```
-frontend/
-├── public/                 # Static assets (images, icons)
-└── src/
-    ├── app/                # Main App component & global CSS styles
-    ├── store/              # Redux Store setup & base RTK Query configuration
-    ├── routes/             # Client-side routing configuration (Protected & Public routes)
-    ├── features/           # Modular features containing pages, components, & api slices
-    │   ├── auth/           # Login & Registration flows
-    │   ├── attendance/     # Clock-in / Clock-out terminal & logs table
-    │   ├── overtime/       # Overtime request modals & approval system
-    │   ├── admin/          # Admin pages (User directories & reports)
-    │   └── theme/          # Dark & Light mode theme context
-    └── main.jsx            # Application entry point
-```
-
-### Key Libraries & Technologies:
-* **Vite**: Ultra-fast bundler and development server.
-* **React 19 & React Router v7**: For building components and handling navigation.
-* **Redux Toolkit & RTK Query**: Manages client state and handles automated backend API caching.
-* **Tailwind CSS v4**: Utility-first CSS framework for modern, responsive, and customizable designs.
-* **React Webcam**: Enables capturing webcam snapshots for attendance selfie verification.
-
----
-
-## ✨ Features
-
-The application adapts based on the user's role:
-
-### 1. 🔑 Authentication & Access Control
-* **Public Pages**: Registration and login screens.
-* **Protected Routes**: Restricts workspace access to logged-in users.
-* **Theme Toggle**: Quick switch between Light Mode and Dark Mode.
-
-### 2. 👤 Employee Dashboard
-* **Punch Terminal**: Allows employees to clock in and clock out.
-* **Selfie Verification**: Captures a quick webcam photo before clocking in.
-* **Geofencing & GPS**: Detects user location to confirm they are inside the office radius.
-* **Attendance History**: Lists daily punch logs and working hours.
-* **Overtime Requests**: Let employees submit an OT request for specific dates with a reason.
-
-### 3. 👥 Manager Dashboard
-* **Team Attendance Logs**: Monitor working hours and validation statuses for all direct reports.
-* **Selfie & GPS Verification Modal**: Review captured photos and precise latitude/longitude location details for punch logs.
-* **Validation Panel**: Label team logs as "Valid" or "Suspicious/Invalid".
-* **Overtime Decisions**: Review, approve, or reject employee overtime hours with remarks.
-
-### 4. ⚙️ Admin Dashboard
-* **User Directory**: Search and view detailed roles (Employee, Manager, Admin) for all users.
-* **Daily Reports Generator**: Select specific dates to check overall attendance, verify working hours, and download reports.
+### Installation
+1. Navigate to the frontend directory:
+   ```bash
+   cd frontend
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Create a `.env` file in the root of the `frontend` folder:
+   ```env
+   VITE_BASE_URI=http://localhost:3000
+   ```
+4. Run the development server:
+   ```bash
+   npm run dev
+   ```
+5. Build for production:
+   ```bash
+   npm run build
+   ```
+6. Preview the production build locally:
+   ```bash
+   npm run preview
+   ```
 
 ---
 
-## 📝 Assumptions
+## Architecture Overview
 
-* **Browser Permissions**: Users must allow the browser access to the **Webcam** and **Location Services (GPS)** for the clock-in feature to work.
-* **Backend Connection**: The frontend assumes the backend API server is running locally on `http://localhost:3000/api/v1` (defined in `src/store/apiSlice.js`).
-* **Active Internet**: The app requires an active network connection to fetch coordinates and submit pictures to the server.
+The codebase is organized using a **4-Layer Architecture** combined with a **Feature-Based Folder Structure** under the `src` directory.
+
+### Directory Structure
+- **`src/app/`**: Application-wide entry point, global styles, and context providers.
+- **`src/features/`**: Contains modular business domains (Self-contained feature folders).
+- **`src/routes/`**: Handles application routing, navigation guards, and layouts.
+- **`src/store/`**: Configures Redux global state and API middleware integrations.
+
+### The 4 Layers (Inside each Feature folder)
+Inside each feature under `src/features/` (e.g., `auth`, `employee`, `managers`, `admin`), code is separated into four distinct layers:
+
+1. **Presentation Layer (`components/` & `pages/`)**: Reusable UI blocks and full-page layout components.
+2. **Hooks/Logic Layer (`hooks/`)**: Custom React hooks encapsulating UI state and business logic.
+3. **State Management Layer (`*.slice.js`)**: Redux Toolkit slices tracking feature-specific global states.
+4. **Data/API Layer (`api/`)**: API query/mutation declarations communicating with the backend.
+
+---
+
+## Features Implemented
+
+- **Authentication & Authorization**: Role-based access control protecting views for Admins, Managers, and Employees.
+- **Punch Terminal**: Location-aware clock-in/out containing:
+  - Selfie capture using the client's webcam.
+  - GPS geolocation validation during punch-in.
+- **Overtime Management**: Employees can apply for overtime, while Managers can approve or reject requests.
+- **Admin Management Console**:
+  - User Directory management.
+  - Attendance log audits across the system.
+  - CSV report generation and exports.
+- **Theme Toggler**: Full Light/Dark mode responsiveness.
+
+---
+
+## Assumptions Made
+
+1. **Backend URL**: The backend server is running and accessible at `http://localhost:3000` (or as specified in `VITE_BASE_URI`).
+2. **Client Hardware**: The user's device has a functional webcam and location services enabled.
+3. **Geolocation & Camera Permissions**: The client browser supports HTML5 Geolocation and MediaDevices API, and the user will grant permission when requested.
+4. **Predefined Roles**: The user account includes one of the predefined roles (`admin`, `manager`, or `employee`) returned by the authentication endpoint.
