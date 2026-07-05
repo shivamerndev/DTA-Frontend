@@ -61,7 +61,7 @@ function ManagerAttendanceLogs() {
                   <td className="py-3.5 px-2">
                     <div className="w-12 h-12 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 shadow-sm">
                       <img
-                        src={`${import.meta.env.VITE_BASE_URI}${log.selfieUrl}`}
+                        src={`https://dta-backend-4i1g.onrender.com${log.selfieUrl}`}
                         alt="Selfie"
                         className="w-full h-full object-cover hover:scale-110 transition duration-300 cursor-pointer"
                         onClick={() => setSelectedLog(log)}
