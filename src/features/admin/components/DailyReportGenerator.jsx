@@ -11,6 +11,7 @@ function DailyReportGenerator({ reportDate, setReportDate, reportRes }) {
 
   return (
     <div className="glass-card p-6 border border-slate-200/50 dark:border-slate-800/50">
+      
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <div>
           <h3 className="text-lg font-bold">Daily Report</h3>

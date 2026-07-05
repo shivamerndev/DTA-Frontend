@@ -1,9 +1,7 @@
 import { useSelector } from "react-redux";
 import { FaSun, FaMoon, FaSignOutAlt } from "react-icons/fa";
+import { Outlet } from "react-router-dom";
 import { selectUser } from "../../auth/auth.slice.js";
-import EmployeeDashboard from "../../attendance/pages/EmployeeDashboard.jsx";
-import ManagerDashboard from "../../overtime/pages/ManagerDashboard.jsx";
-import AdminDashboard from "../../admin/pages/AdminDashboard.jsx";
 import { useTheme } from "../../theme/useTheme.js";
 import useAuth from "../../auth/hooks/useAuth.js";
 
@@ -55,9 +53,7 @@ function DashboardLayout() {
       </header>
 
       <main className="flex-1 p-6 max-w-7xl mx-auto w-full">
-        {user?.role === "employee" && <EmployeeDashboard user={user} />}
-        {user?.role === "manager" && <ManagerDashboard user={user} />}
-        {user?.role === "admin" && <AdminDashboard user={user} />}
+        <Outlet />
       </main>
     </div>
   );
