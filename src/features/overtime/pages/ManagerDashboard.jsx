@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import dayjs from "dayjs";
 import { FaCheck, FaTimes, FaMapMarkerAlt } from "react-icons/fa";
 import { useGetAttendanceTeamQuery } from "../../attendance/api/attendanceApi.js";
@@ -6,7 +6,9 @@ import { useGetOTRequestsTeamQuery } from "../api/overtimeApi.js";
 import useAttendance from "../../attendance/hooks/useAttendance.js";
 import useOvertime from "../hooks/useOvertime.js";
 
-function ManagerDashboard({ user }) {
+
+function ManagerDashboard() {
+
   const [selectedLog, setSelectedLog] = useState(null);
   const [verifyStatus, setVerifyStatus] = useState("valid");
   const [verifyRemarks, setVerifyRemarks] = useState("");
@@ -97,7 +99,7 @@ function ManagerDashboard({ user }) {
                     <td className="py-3.5 px-2">
                       <div className="w-12 h-12 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 shadow-sm">
                         <img
-                          src={`http://localhost:3000${log.selfieUrl}`}
+                          src={`${import.meta.env.VITE_BASE_URI}${log.selfieUrl}`}
                           alt="Selfie"
                           className="w-full h-full object-cover hover:scale-110 transition duration-300 cursor-pointer"
                           onClick={() => setSelectedLog(log)}

@@ -1,33 +1,17 @@
-import React, { useState, useRef, useCallback } from "react";
+import { useRef } from "react";
 import Webcam from "react-webcam";
-import toast from "react-hot-toast";
 import dayjs from "dayjs";
-import {
-  FaCamera,
-  FaSignInAlt,
-  FaSignOutAlt,
-  FaClock,
-  FaCheckCircle,
-  FaPlusCircle,
-} from "react-icons/fa";
+import { FaCamera, FaSignInAlt, FaSignOutAlt, FaClock, FaCheckCircle, FaPlusCircle} from "react-icons/fa";
 import useAttendance from "../hooks/useAttendance.js";
 
 function PunchTerminal({ todayLog, refetchLogs, onOpenOTModal }) {
+  
   const webcamRef = useRef(null);
-  const {
-    cameraActive,
-    photo,
-    setPhoto,
-    punching,
-    handleCapture,
-    handlePunchIn,
-    handlePunchOut,
-  } = useAttendance();
+  const { cameraActive, photo, setPhoto, punching, handleCapture, handlePunchIn, handlePunchOut} = useAttendance();
 
   const capture = () => handleCapture(webcamRef);
   const onPunchIn = () => handlePunchIn(refetchLogs);
   const onPunchOut = () => handlePunchOut(refetchLogs);
-
 
   return (
     <div className="lg:col-span-1 glass-card p-6 border border-slate-200/50 dark:border-slate-800/50 flex flex-col items-center">

@@ -1,7 +1,9 @@
 import { apiSlice } from "../../../store/apiSlice.js";
 
 export const attendanceApi = apiSlice.injectEndpoints({
+
   endpoints: (builder) => ({
+
     punchIn: builder.mutation({
       query: (punchData) => ({
         url: "/attendance/punch-in",
@@ -10,6 +12,8 @@ export const attendanceApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Attendance", "Report"],
     }),
+
+
     punchOut: builder.mutation({
       query: () => ({
         url: "/attendance/punch-out",
@@ -17,6 +21,8 @@ export const attendanceApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Attendance", "Report"],
     }),
+
+
     getAttendanceMe: builder.query({
       query: (params) => ({
         url: "/attendance/me",
@@ -24,6 +30,8 @@ export const attendanceApi = apiSlice.injectEndpoints({
       }),
       providesTags: ["Attendance"],
     }),
+
+
     getAttendanceTeam: builder.query({
       query: (params) => ({
         url: "/attendance/team",
@@ -31,6 +39,8 @@ export const attendanceApi = apiSlice.injectEndpoints({
       }),
       providesTags: ["Attendance"],
     }),
+
+
     getAttendanceAll: builder.query({
       query: (params) => ({
         url: "/attendance/all",
@@ -38,6 +48,8 @@ export const attendanceApi = apiSlice.injectEndpoints({
       }),
       providesTags: ["Attendance"],
     }),
+
+
     verifyAttendance: builder.mutation({
       query: ({ id, status, remarks }) => ({
         url: `/attendance/${id}/verify`,
@@ -46,15 +58,11 @@ export const attendanceApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Attendance", "Report"],
     }),
+
   }),
-  overrideExisting: false,
+
+  overrideExisting: false
+
 });
 
-export const {
-  usePunchInMutation,
-  usePunchOutMutation,
-  useGetAttendanceMeQuery,
-  useGetAttendanceTeamQuery,
-  useGetAttendanceAllQuery,
-  useVerifyAttendanceMutation,
-} = attendanceApi;
+export const { usePunchInMutation, usePunchOutMutation, useGetAttendanceMeQuery, useGetAttendanceTeamQuery, useGetAttendanceAllQuery, useVerifyAttendanceMutation } = attendanceApi;

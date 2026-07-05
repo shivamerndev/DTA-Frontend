@@ -16,7 +16,8 @@ function DashboardLayout() {
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 transition-colors flex flex-col">
-      {/* Top Navigation */}
+
+
       <header className="sticky top-0 z-30 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200/50 dark:border-slate-800/50 px-6 py-4 flex justify-between items-center shadow-sm">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-indigo-600/30">
@@ -53,7 +54,6 @@ function DashboardLayout() {
         </div>
       </header>
 
-      {/* Main Panel */}
       <main className="flex-1 p-6 max-w-7xl mx-auto w-full">
         {user?.role === "employee" && <EmployeeDashboard user={user} />}
         {user?.role === "manager" && <ManagerDashboard user={user} />}
