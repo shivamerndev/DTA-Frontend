@@ -10,74 +10,24 @@ import {
   FaCheckCircle,
   FaPlusCircle,
 } from "react-icons/fa";
-import { usePunchInMutation, usePunchOutMutation } from "../api/attendanceApi.js";
+import useAttendance from "../hooks/useAttendance.js";
 
 function PunchTerminal({ todayLog, refetchLogs, onOpenOTModal }) {
   const webcamRef = useRef(null);
-  const [cameraActive, setCameraActive] = useState(true);
-  const [photo, setPhoto] = useState(null);
-  const [gps, setGps] = useState(null);
-  const [punching, setPunching] = useState(false);
+  const {
+    cameraActive,
+    photo,
+    setPhoto,
+    punching,
+    handleCapture,
+    handlePunchIn,
+    handlePunchOut,
+  } = useAttendance();
 
-  const [punchIn] = usePunchInMutation();
-  const [punchOut] = usePunchOutMutation();
+  const capture = () => handleCapture(webcamRef);
+  const onPunchIn = () => handlePunchIn(refetchLogs);
+  const onPunchOut = () => handlePunchOut(refetchLogs);
 
-  const handleCapture = useCallback(() => {
-    if (webcamRef.current) {
-      const imageSrc = webcamRef.current.getScreenshot();
-      setPhoto(imageSrc);
-      toast.success("Selfie captured!");
-    }
-  }, [webcamRef]);
-
-  const handlePunchIn = () => {
-    if (!photo) {
-      toast.error("Please capture your selfie first!");
-      return;
-    }
-
-    setPunching(true);
-    toast.loading("Obtaining location...", { id: "gps" });
-
-    navigator.geolocation.getCurrentPosition(
-      async (pos) => {
-        const location = {
-          latitude: pos.coords.latitude,
-          longitude: pos.coords.longitude,
-        };
-        setGps(location);
-        toast.success("Location acquired", { id: "gps" });
-
-        try {
-          toast.loading("Punching in...", { id: "punch" });
-          await punchIn({ selfie: photo, location }).unwrap();
-          toast.success("Punched in successfully!", { id: "punch" });
-          setPhoto(null);
-          refetchLogs();
-        } catch (err) {
-          toast.error(err?.data?.message || "Punch In failed", { id: "punch" });
-        } finally {
-          setPunching(false);
-        }
-      },
-      (err) => {
-        toast.error("Geolocation access denied or timed out. Please allow GPS.", { id: "gps" });
-        setPunching(false);
-      },
-      { enableHighAccuracy: true, timeout: 10000 }
-    );
-  };
-
-  const handlePunchOut = async () => {
-    try {
-      toast.loading("Punching out...", { id: "punchout" });
-      await punchOut().unwrap();
-      toast.success("Punched out successfully!", { id: "punchout" });
-      refetchLogs();
-    } catch (err) {
-      toast.error(err?.data?.message || "Punch Out failed", { id: "punchout" });
-    }
-  };
 
   return (
     <div className="lg:col-span-1 glass-card p-6 border border-slate-200/50 dark:border-slate-800/50 flex flex-col items-center">
@@ -104,7 +54,7 @@ function PunchTerminal({ todayLog, refetchLogs, onOpenOTModal }) {
               )}
               <div className="absolute bottom-3 right-3">
                 <button
-                  onClick={handleCapture}
+                  onClick={capture}
                   className="p-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full transition glow-btn"
                   title="Capture photo"
                 >
@@ -124,7 +74,7 @@ function PunchTerminal({ todayLog, refetchLogs, onOpenOTModal }) {
             </div>
           )}
           <button
-            onClick={handlePunchIn}
+            onClick={onPunchIn}
             disabled={punching}
             className="w-full py-4.5 bg-green-600 hover:bg-green-700 text-white font-bold rounded-2xl transition shadow-lg shadow-green-600/20 glow-btn flex items-center justify-center gap-2 disabled:opacity-50"
           >
@@ -150,7 +100,7 @@ function PunchTerminal({ todayLog, refetchLogs, onOpenOTModal }) {
           </div>
 
           <button
-            onClick={handlePunchOut}
+            onClick={onPunchOut}
             className="w-full py-4.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-2xl transition shadow-lg shadow-rose-600/20 glow-btn flex items-center justify-center gap-2"
           >
             <FaSignOutAlt />

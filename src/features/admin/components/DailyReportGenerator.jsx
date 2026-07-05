@@ -1,48 +1,12 @@
 import React from "react";
-import dayjs from "dayjs";
-import toast from "react-hot-toast";
 import { FaDownload } from "react-icons/fa";
+import useAdmin from "../hooks/useAdmin.js";
 
 function DailyReportGenerator({ reportDate, setReportDate, reportRes }) {
-  const exportReportToCSV = () => {
-    if (!reportRes?.data?.length) {
-      toast.error("No data available to export");
-      return;
-    }
+  const { handleExportCSV } = useAdmin();
 
-    const headers = [
-      "Employee Name",
-      "Email",
-      "Date",
-      "Punch In",
-      "Punch Out",
-      "Working Hours",
-      "Status",
-      "OT Status",
-      "OT Hours",
-    ];
-    const rows = reportRes.data.map((row) => [
-      row.employeeName,
-      row.employeeEmail,
-      row.date,
-      dayjs(row.punchIn).format("hh:mm A"),
-      row.punchOut ? dayjs(row.punchOut).format("hh:mm A") : "Active",
-      row.workingHours,
-      row.status,
-      row.overtimeStatus,
-      row.overtimeHours,
-    ]);
-
-    const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows.map((e) => e.map((val) => `"${val}"`).join(","))].join("\n");
-
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `attendance_report_${reportDate}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    toast.success("CSV Report downloaded successfully!");
+  const exportReport = () => {
+    handleExportCSV(reportRes?.data, reportDate);
   };
 
   return (
@@ -63,7 +27,7 @@ function DailyReportGenerator({ reportDate, setReportDate, reportRes }) {
             onChange={(e) => setReportDate(e.target.value)}
           />
           <button
-            onClick={exportReportToCSV}
+            onClick={exportReport}
             className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 glow-btn"
           >
             <FaDownload /> Export CSV

@@ -1,25 +1,14 @@
 import React, { useState } from "react";
-import toast from "react-hot-toast";
-import { useSubmitOTRequestMutation } from "../api/overtimeApi.js";
+import useOvertime from "../hooks/useOvertime.js";
 
 function OvertimeRequestModal({ attendanceId, onClose }) {
   const [otHours, setOtHours] = useState(1);
   const [otReason, setOtReason] = useState("");
-  const [requestOT, { isLoading: submittingOT }] = useSubmitOTRequestMutation();
+  const { handleOTSubmit, isSubmitting } = useOvertime();
 
-  const handleOTSubmit = async (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
-    try {
-      await requestOT({
-        attendanceId,
-        requestedHours: Number(otHours),
-        reason: otReason,
-      }).unwrap();
-      toast.success("Overtime request submitted!");
-      onClose();
-    } catch (err) {
-      toast.error(err?.data?.message || "Submission failed");
-    }
+    handleOTSubmit(attendanceId, otHours, otReason, onClose);
   };
 
   return (
@@ -34,7 +23,7 @@ function OvertimeRequestModal({ attendanceId, onClose }) {
             ✕
           </button>
         </div>
-        <form onSubmit={handleOTSubmit} className="space-y-4">
+        <form onSubmit={onSubmit} className="space-y-4">
           <div>
             <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
               Overtime Hours
@@ -64,10 +53,10 @@ function OvertimeRequestModal({ attendanceId, onClose }) {
           </div>
           <button
             type="submit"
-            disabled={submittingOT}
+            disabled={isSubmitting}
             className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl glow-btn disabled:opacity-50"
           >
-            {submittingOT ? "Submitting..." : "Submit Overtime Request"}
+            {isSubmitting ? "Submitting..." : "Submit Overtime Request"}
           </button>
         </form>
       </div>

@@ -25,7 +25,7 @@ function EmployeeDashboard({ user }) {
     refetchLogs();
   };
 
-  // Find today's log if it exists
+
   const todayStr = dayjs().format("YYYY-MM-DD");
   const todayLog = logsRes?.data?.find((log) => log.date === todayStr);
 

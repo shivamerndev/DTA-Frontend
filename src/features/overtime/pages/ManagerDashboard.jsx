@@ -1,16 +1,10 @@
 import React, { useState } from "react";
 import dayjs from "dayjs";
-import toast from "react-hot-toast";
 import { FaCheck, FaTimes, FaMapMarkerAlt } from "react-icons/fa";
-import {
-  useGetAttendanceTeamQuery,
-  useVerifyAttendanceMutation,
-} from "../../attendance/api/attendanceApi.js";
-import {
-  useGetOTRequestsTeamQuery,
-  useApproveOTRequestMutation,
-  useRejectOTRequestMutation,
-} from "../api/overtimeApi.js";
+import { useGetAttendanceTeamQuery } from "../../attendance/api/attendanceApi.js";
+import { useGetOTRequestsTeamQuery } from "../api/overtimeApi.js";
+import useAttendance from "../../attendance/hooks/useAttendance.js";
+import useOvertime from "../hooks/useOvertime.js";
 
 function ManagerDashboard({ user }) {
   const [selectedLog, setSelectedLog] = useState(null);
@@ -20,37 +14,24 @@ function ManagerDashboard({ user }) {
 
   const { data: teamLogs, refetch: refetchLogs } = useGetAttendanceTeamQuery();
   const { data: pendingOT, refetch: refetchOT } = useGetOTRequestsTeamQuery();
-  const [verifyAttendance] = useVerifyAttendanceMutation();
-  const [approveOT] = useApproveOTRequestMutation();
-  const [rejectOT] = useRejectOTRequestMutation();
 
-  const handleVerifySubmit = async (e) => {
+  const { handleVerify } = useAttendance();
+  const { handleOTDecision } = useOvertime();
+
+  const handleVerifySubmit = (e) => {
     e.preventDefault();
-    try {
-      await verifyAttendance({ id: selectedLog._id, status: verifyStatus, remarks: verifyRemarks }).unwrap();
-      toast.success("Attendance record validated successfully.");
+    handleVerify(selectedLog._id, verifyStatus, verifyRemarks, () => {
       setSelectedLog(null);
       setVerifyRemarks("");
       refetchLogs();
-    } catch (err) {
-      toast.error(err?.data?.message || "Verification failed");
-    }
+    });
   };
 
-  const handleOTDecision = async (id, approve, reason = "") => {
-    try {
-      if (approve) {
-        await approveOT({ id, remarks: reason }).unwrap();
-        toast.success("Overtime request approved.");
-      } else {
-        await rejectOT({ id, remarks: reason }).unwrap();
-        toast.success("Overtime request rejected.");
-      }
+  const onOTDecisionSubmit = (id, approve, reason = "") => {
+    handleOTDecision(id, approve, reason, () => {
       refetchOT();
       refetchLogs();
-    } catch (err) {
-      toast.error(err?.data?.message || "Action failed");
-    }
+    });
   };
 
   return (
@@ -202,7 +183,7 @@ function ManagerDashboard({ user }) {
                     <button
                       onClick={() => {
                         const notes = prompt("Enter approval remarks (optional):");
-                        if (notes !== null) handleOTDecision(ot._id, true, notes);
+                        if (notes !== null) onOTDecisionSubmit(ot._id, true, notes);
                       }}
                       className="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1"
                     >
@@ -211,7 +192,7 @@ function ManagerDashboard({ user }) {
                     <button
                       onClick={() => {
                         const notes = prompt("Enter rejection reason:");
-                        if (notes) handleOTDecision(ot._id, false, notes);
+                        if (notes) onOTDecisionSubmit(ot._id, false, notes);
                       }}
                       className="px-3.5 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1"
                     >
