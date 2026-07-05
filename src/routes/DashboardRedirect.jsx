@@ -12,7 +12,7 @@ function DashboardRedirect() {
     return <Navigate to="/manager/attendance" replace />;
   }
   if (user?.role === "admin") {
-    return <Navigate to="/admin/users" replace />;
+    return <Navigate to="/admin/dir" replace />;
   }
 
   return <Navigate to="/login" replace />;

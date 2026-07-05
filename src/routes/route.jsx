@@ -1,18 +1,19 @@
-import { createBrowserRouter, Navigate } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import Login from "../features/auth/pages/Login.jsx";
 import Register from "../features/auth/pages/Register.jsx";
-import DashboardLayout from "../features/dashboard/pages/DashboardLayout.jsx";
 import { ProtectedRoute } from "./ProtectedRoute.jsx";
 import { PublicRoute } from "./PublicRoute.jsx";
-import DashboardRedirect from "./DashboardRedirect.jsx";
-import EmployeeDashboard from "../features/attendance/pages/EmployeeDashboard.jsx";
-import ManagerDashboard from "../features/overtime/pages/ManagerDashboard.jsx";
-import ManagerAttendanceLogs from "../features/overtime/pages/ManagerAttendanceLogs.jsx";
-import ManagerOvertimeRequests from "../features/overtime/pages/ManagerOvertimeRequests.jsx";
-import AdminDashboard from "../features/admin/pages/AdminDashboard.jsx";
-import UserDirectoryRoute from "../features/admin/pages/UserDirectoryRoute.jsx";
-import DailyReportGeneratorRoute from "../features/admin/pages/DailyReportGeneratorRoute.jsx";
 import App from "../app/App.jsx";
+import ManagerDashboard from "../features/managers/pages/ManagerDashBoard.jsx"
+import EmployeeDashboard from "../features/employee/pages/EmployeeDashboard.jsx"
+import AdminDashboard from "../features/admin/pages/AdminDashboard.jsx"
+import DashboardLayout from "../features/auth/pages/DashboardLayout.jsx";
+import ManagerAttendanceLogs from "../features/managers/components/ManagerAttendanceLogs.jsx";
+import ManagerOvertimeRequests from "../features/managers/components/ManagerOvertimeRequests.jsx";
+import DailyReportGenerator from "../features/admin/pages/DailyReportGenerator.jsx";
+import AdminAttendanceLogs from "../features/admin/pages/AdminAttendanceLogs.jsx"
+import UserDirectory from "../features/admin/components/UserDirectory.jsx";
+import ErrorRoute from "./ErrorRoute.jsx";
 
 export const router = createBrowserRouter([{
     element: <App />,
@@ -28,75 +29,57 @@ export const router = createBrowserRouter([{
                 element: <Register />
             }
         ]
-    },
-    {
-        element: <ProtectedRoute allowedRoles={["employee", "manager", "admin"]} />,
+    }, {
+        element: <ProtectedRoute />,
         children: [
             {
+                path: "/",
                 element: <DashboardLayout />,
                 children: [
                     {
-                        path: "/",
-                        element: <DashboardRedirect />
+                        path: "employee",
+                        element: <EmployeeDashboard />
                     },
                     {
-                        element: <ProtectedRoute allowedRoles={["employee"]} />,
+                        path: "manager",
+                        element: <ManagerDashboard />,
                         children: [
                             {
-                                path: "/employee",
-                                element: <EmployeeDashboard />
+                                path: "attendance",
+                                element: <ManagerAttendanceLogs />
+                            },
+                            {
+                                path: "overtime",
+                                element: <ManagerOvertimeRequests />
                             }
                         ]
                     },
                     {
-                        element: <ProtectedRoute allowedRoles={["manager"]} />,
+                        path: "admin",
+                        element: <AdminDashboard />,
                         children: [
                             {
-                                path: "/manager",
-                                element: <ManagerDashboard />,
-                                children: [
-                                    {
-                                        path: "",
-                                        element: <Navigate to="attendance" replace />
-                                    },
-                                    {
-                                        path: "attendance",
-                                        element: <ManagerAttendanceLogs />
-                                    },
-                                    {
-                                        path: "overtime",
-                                        element: <ManagerOvertimeRequests />
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        element: <ProtectedRoute allowedRoles={["admin"]} />,
-                        children: [
+                                path: "dir",
+                                element: <UserDirectory />
+                            },
                             {
-                                path: "/admin",
-                                element: <AdminDashboard />,
-                                children: [
-                                    {
-                                        path: "",
-                                        element: <Navigate to="users" replace />
-                                    },
-                                    {
-                                        path: "users",
-                                        element: <UserDirectoryRoute />
-                                    },
-                                    {
-                                        path: "reports",
-                                        element: <DailyReportGeneratorRoute />
-                                    }
-                                ]
+                                path: "reports",
+                                element: <DailyReportGenerator />
+                            },
+                            {
+                                path: "attendance",
+                                element: <AdminAttendanceLogs />
                             }
                         ]
                     }
                 ]
-            }
+            },
+
         ]
-    }]
+    }
+    ]
+}, {
+    path: "*",
+    element: <ErrorRoute />
 }]);
 

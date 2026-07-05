@@ -11,5 +11,8 @@ export const ProtectedRoute = ({ allowedRoles }) => {
         return <Navigate to="/" replace />;
     }
 
-    return <Outlet />;
+    return <>
+    
+        <Outlet />;
+    </>
 };

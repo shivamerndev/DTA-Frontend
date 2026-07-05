@@ -1,9 +1,10 @@
 import { useSelector } from "react-redux";
 import { FaSun, FaMoon, FaSignOutAlt } from "react-icons/fa";
 import { Outlet } from "react-router-dom";
-import { selectUser } from "../../auth/auth.slice.js";
+import { selectUser } from "../auth.slice.js";
 import { useTheme } from "../../theme/useTheme.js";
-import useAuth from "../../auth/hooks/useAuth.js";
+import useAuth from "../hooks/useAuth.js";
+import DashboardRedirect from "../../../routes/DashboardRedirect.jsx";
 
 function DashboardLayout() {
 
@@ -14,15 +15,15 @@ function DashboardLayout() {
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 transition-colors flex flex-col">
+      <DashboardRedirect />
 
-
-      <header className="sticky top-0 z-30 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200/50 dark:border-slate-800/50 px-6 py-4 flex justify-between items-center shadow-sm">
+      <header className="sticky top-0 z-30 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200/50 dark:border-slate-800/50 p-6 flex justify-between items-center shadow-sm">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-indigo-600/30">
+          <div className="w-9 h-9 rounded-md bg-indigo-600 flex items-center justify-center text-white font-black text-base shadow-lg shadow-indigo-600/30">
             DT
           </div>
           <div>
-            <h1 className="text-xl font-bold tracking-tight m-0 text-slate-900 dark:text-white">D-Table Analytics</h1>
+            <h1 className="text-lg font-bold tracking-tight m-0 text-slate-900 dark:text-white">D-Table Analytics</h1>
             <p className="text-xs text-slate-500 dark:text-slate-400">Attendance Center</p>
           </div>
         </div>

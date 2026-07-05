@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import useOvertime from "../hooks/useOvertime.js";
+import { useState } from "react";
+import useOvertime from "../../managers/hooks/useOvertime.js";
 
 function OvertimeRequestModal({ attendanceId, onClose }) {
   const [otHours, setOtHours] = useState(1);

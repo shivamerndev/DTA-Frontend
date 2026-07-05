@@ -1,8 +1,11 @@
-import React from "react";
 import { FaUsers } from "react-icons/fa";
+import { useOutletContext } from "react-router-dom";
 
-function UserDirectory({ users }) {
-  return (
+function UserDirectory() {
+
+  const { usersRes: users } = useOutletContext();
+  
+  return (users &&
     <div className="glass-card p-6 border border-slate-200/50 dark:border-slate-800/50">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-bold flex items-center gap-2">
@@ -23,7 +26,7 @@ function UserDirectory({ users }) {
           </thead>
           <tbody className="divide-y divide-slate-100 dark:divide-slate-900">
             {users?.map((user) => (
-              <tr key={user._id} className="hover:bg-slate-50/50 dark:hover:bg-slate-900/30">
+              <tr onClick={() => console.log(user)} key={user._id} className="hover:bg-slate-50/50 dark:hover:bg-slate-900/30">
                 <td className="py-3.5 px-2 font-semibold text-slate-900 dark:text-white">{user.name}</td>
                 <td className="py-3.5 px-2">{user.email}</td>
                 <td className="py-3.5 px-2">

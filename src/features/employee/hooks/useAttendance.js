@@ -1,12 +1,10 @@
 import { useState, useCallback } from "react";
 import toast from "react-hot-toast";
-import {
-  usePunchInMutation,
-  usePunchOutMutation,
-  useVerifyAttendanceMutation,
-} from "../api/attendanceApi.js";
+import { usePunchInMutation, usePunchOutMutation, useVerifyAttendanceMutation } from "../api/attendance.api.js";
+
 
 export default function useAttendance() {
+
   const [cameraActive, setCameraActive] = useState(true);
   const [photo, setPhoto] = useState(null);
   const [gps, setGps] = useState(null);
@@ -16,6 +14,7 @@ export default function useAttendance() {
   const [punchOut] = usePunchOutMutation();
   const [verifyAttendance] = useVerifyAttendanceMutation();
 
+
   const handleCapture = useCallback((webcamRef) => {
     if (webcamRef.current) {
       const imageSrc = webcamRef.current.getScreenshot();
@@ -23,6 +22,7 @@ export default function useAttendance() {
       toast.success("Selfie captured!");
     }
   }, []);
+
 
   const handlePunchIn = async (refetchLogs) => {
     if (!photo) {
@@ -33,12 +33,13 @@ export default function useAttendance() {
     setPunching(true);
     toast.loading("Obtaining location...", { id: "gps" });
 
-    navigator.geolocation.getCurrentPosition(
-      async (pos) => {
+    navigator.geolocation.getCurrentPosition( async (pos) => {
+
         const location = {
           latitude: pos.coords.latitude,
           longitude: pos.coords.longitude,
         };
+
         setGps(location);
         toast.success("Location acquired", { id: "gps" });
 
@@ -48,6 +49,7 @@ export default function useAttendance() {
           toast.success("Punched in successfully!", { id: "punch" });
           setPhoto(null);
           if (refetchLogs) refetchLogs();
+
         } catch (err) {
           toast.error(err?.data?.message || "Punch In failed", { id: "punch" });
         } finally {
@@ -62,6 +64,7 @@ export default function useAttendance() {
     );
   };
 
+
   const handlePunchOut = async (refetchLogs) => {
     try {
       toast.loading("Punching out...", { id: "punchout" });
@@ -73,6 +76,7 @@ export default function useAttendance() {
     }
   };
 
+
   const handleVerify = async (id, status, remarks, onSuccess) => {
     try {
       await verifyAttendance({ id, status, remarks }).unwrap();
@@ -83,16 +87,7 @@ export default function useAttendance() {
     }
   };
 
-  return {
-    cameraActive,
-    setCameraActive,
-    photo,
-    setPhoto,
-    gps,
-    punching,
-    handleCapture,
-    handlePunchIn,
-    handlePunchOut,
-    handleVerify,
-  };
+
+  return { cameraActive, setCameraActive, photo, setPhoto, gps, punching, handleCapture, handlePunchIn, handlePunchOut, handleVerify };
+
 }

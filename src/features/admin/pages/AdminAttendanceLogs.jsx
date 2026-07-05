@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { useOutletContext } from "react-router-dom";
 import dayjs from "dayjs";
 import { FaMapMarkerAlt } from "react-icons/fa";
-import useAttendance from "../../attendance/hooks/useAttendance.js";
+import useAttendance from "../../employee/hooks/useAttendance.js";
+import { useGetAttendanceAllQuery } from "../../employee/api/attendance.api.js";
+  
+function AdminAttendanceLogs() {
 
-function ManagerAttendanceLogs() {
-  const { teamLogs, refetchLogs } = useOutletContext();
+  const { data: teamLogs, refetch: refetchLogs } = useGetAttendanceAllQuery();
+
   const [selectedLog, setSelectedLog] = useState(null);
   const [verifyStatus, setVerifyStatus] = useState("valid");
   const [verifyRemarks, setVerifyRemarks] = useState("");
@@ -71,13 +73,12 @@ function ManagerAttendanceLogs() {
                   </td>
                   <td className="py-3.5 px-2">
                     <span
-                      className={`text-xs font-semibold px-2.5 py-0.5 rounded-full ${
-                        log.status === "valid"
-                          ? "bg-green-500/10 text-green-500"
-                          : log.status === "invalid"
+                      className={`text-xs font-semibold px-2.5 py-0.5 rounded-full ${log.status === "valid"
+                        ? "bg-green-500/10 text-green-500"
+                        : log.status === "invalid"
                           ? "bg-red-500/10 text-red-500"
                           : "bg-amber-500/10 text-amber-500"
-                      }`}
+                        }`}
                     >
                       {log.status}
                     </span>
@@ -160,22 +161,20 @@ function ManagerAttendanceLogs() {
                       <button
                         type="button"
                         onClick={() => setVerifyStatus("valid")}
-                        className={`py-2 rounded-xl text-xs font-bold border transition ${
-                          verifyStatus === "valid"
-                            ? "bg-green-600 text-white border-green-600"
-                            : "border-slate-200 dark:border-slate-800 hover:bg-slate-50"
-                        }`}
+                        className={`py-2 rounded-xl text-xs font-bold border transition ${verifyStatus === "valid"
+                          ? "bg-green-600 text-white border-green-600"
+                          : "border-slate-200 dark:border-slate-800 hover:bg-slate-50"
+                          }`}
                       >
                         Valid
                       </button>
                       <button
                         type="button"
                         onClick={() => setVerifyStatus("invalid")}
-                        className={`py-2 rounded-xl text-xs font-bold border transition ${
-                          verifyStatus === "invalid"
-                            ? "bg-red-600 text-white border-red-600"
-                            : "border-slate-200 dark:border-slate-800 hover:bg-slate-50"
-                        }`}
+                        className={`py-2 rounded-xl text-xs font-bold border transition ${verifyStatus === "invalid"
+                          ? "bg-red-600 text-white border-red-600"
+                          : "border-slate-200 dark:border-slate-800 hover:bg-slate-50"
+                          }`}
                       >
                         Suspicious/Invalid
                       </button>
@@ -209,4 +208,4 @@ function ManagerAttendanceLogs() {
   );
 }
 
-export default ManagerAttendanceLogs;
+export default AdminAttendanceLogs;

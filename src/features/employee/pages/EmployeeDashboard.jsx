@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import dayjs from "dayjs";
-import { useGetAttendanceMeQuery } from "../api/attendanceApi.js";
-import { useGetOTRequestsMeQuery } from "../../overtime/api/overtimeApi.js";
+import { useGetAttendanceMeQuery } from "../api/attendance.api.js";
+import { useGetOTRequestsMeQuery } from "../../managers/api/overtimeApi.js";
 import PunchTerminal from "../components/PunchTerminal.jsx";
 import AttendanceLogsTable from "../components/AttendanceLogsTable.jsx";
-import OvertimeRequestModal from "../../overtime/components/OvertimeRequestModal.jsx";
+import OvertimeRequestModal from "../components/OvertimeRequestModal.jsx";
 
-function EmployeeDashboard({ user }) {
+
+function EmployeeDashboard() {
+
+
   const [isOTModalOpen, setIsOTModalOpen] = useState(false);
   const [otAttendanceId, setOtAttendanceId] = useState("");
 
